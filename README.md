@@ -2,7 +2,7 @@
 
 The Kitana Python SDK provides a high-level, "Pythonic" interface for the Green Vectors™ vectorization engine. It handles authentication, automatic token renewal, and client-side validation out of the box.
 
-Additionally, the SDK includes a weighting mechanism that utilizes **BM25 term frequency** to analyze and compare your corpus, optimizing vector significance.
+Additionally, for RAG the SDK includes a weighting mechanism that utilizes **BM25 term frequency** to analyze and compare your corpus, optimizing vector significance.
 
 ## ⚠️ **THIS IS A BETA!!!!1** ⚠️
 
@@ -18,32 +18,98 @@ Additionally, the SDK includes a weighting mechanism that utilizes **BM25 term f
 ### Required Infrastructure
 
 **For Weighting (BM25):**
+
 - PostgreSQL 15 or greater.
 *Note: SQLite is supported for local testing/development only.*
 
 **For Storage & Search:**
+
 - A vector database configured for **Euclidean distance** search.
 
 #### Environment Variables
+
 You can configure the SDK using the following optional environment variables:
+
 - `KITANA_DB_URL='postgresql+asyncpg://[user]:[pass]@[host]:[port]'`
 - `KITANA_SCHEMA='kitana'` (Defaults to `public` if unset)
 
 ## 🚀 Installation
 
-*Repository coming soon.*
+### Install the SDK using the provided wheel file
 
-Currently, you may install the SDK using the provided wheel file:
+#### PIP using Wheel
 
-**<span title="Package Installer for Python">PIP:</span>**
-```bash
-pip install kitana-0.1.1-py3-none-any.whl
+```shell
+pip install kitana-0.1.3-py3-none-any.whl
 ```
 
-**<span title="Package manager developed by Astral">UV:</span>**
-```bash
-uv add kitana-0.1.1-py3-none-any.whl
+#### Astral uv using Wheel
+
+```shell
+uv add kitana-0.1.3-py3-none-any.whl
 ```
+
+### Install the SDK using repo
+
+#### Astral uv using Repo
+
+- Add needed packages for azure
+  - Linux/macOS:
+
+    ```shell
+    uv tool install keyring --with artifacts-keyring
+    export UV_INDEX_KITANA_REGISTRY_USERNAME="kitana"
+    export UV_INDEX_KITANA_REGISTRY_PASSWORD="your_token_here"
+    ```
+
+  - Windows (PowerShell):
+
+    ```powershell
+    $env:UV_INDEX_KITANA_REGISTRY_USERNAME="kitana"
+    $env:UV_INDEX_KITANA_REGISTRY_PASSWORD="your_token_here"
+    ```
+
+- Add this to pyproject.toml
+
+    ```toml
+    [[tool.uv.index]]
+    name = "kitana-registry"
+    url = "https://pkgs.dev.azure.com/Morphos-AI/kitana-sdk/_packaging/kitana-feed/pypi/simple/"
+    ```
+
+- Install Kitana
+
+    ```shell
+    uv add kitana==0.1.2
+    ```
+
+#### PIP using Repo
+
+- Add the PAT to env vars
+  - Linux/macOS
+  
+  ```shell
+  export AZURE_PAT=your_token_here
+  ```
+
+  - Windows (PowerShell):
+
+  ```powershell
+  $env:AZURE_PAT="your_token_here"
+  ```
+
+- Add a pip.ini (Windows) or pip.conf (Mac/Linux) file to your virtualenv
+
+    ```toml
+    [global]
+    index-url=https://pkgs.dev.azure.com:${AZURE_PAT}/Morphos-AI/kitana-sdk/_packaging/kitana-feed/pypi/simple/
+    ```
+
+- Install Kitana
+
+    ```shell
+    pip install kitana==0.1.2
+    ```
 
 ## 🗄️ Database Setup
 
@@ -51,7 +117,8 @@ Before running the ingestion code, you must initialize the weighting database. T
 
 1. **Install Drivers:** Ensure you have the appropriate async driver for your database (e.g., `asyncpg` for PostgreSQL).
 2. **Run Migration:**
-```bash
+
+```shell
 # Set your schema (optional, defaults to public)
 export KITANA_SCHEMA='kitana'
 
@@ -59,7 +126,6 @@ export KITANA_SCHEMA='kitana'
 python -m kitana.weighting.migrate_db --url 'postgresql+asyncpg://[user]:[pass]@[host]:[port]'
 
 ```
-
 
 *The schema and necessary tables will be created if they are missing.*
 
