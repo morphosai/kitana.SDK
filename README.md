@@ -277,6 +277,38 @@ def retrieve_vectors(
 
 ```
 
+### 3. Deleting a file or clearning the DB
+
+#### Delete one file's weighting data
+
+```python
+from kitana.weighting.stem_counts import delete_facet_weights
+
+def delete_file(
+    file_id: UUID|str,
+    db: AsyncSession,
+    entity_id = UUID("00000000-0000-0000-0000-000000000000"),
+    schema: str = DEFAULT_SCHEMA,
+) -> None:
+  delete_vectors_for_file(file_id) // your function to delete the associated vectors
+  delete_facet_weights(conn=conn, entity_ids=[entity_id], facet_ids=[file_id])
+```
+
+#### Delete All weighting data
+
+```python
+from kitana.weighting.stem_counts import delete_all_weights
+
+def delete_all(
+    db: AsyncSession,
+    entity_id = UUID("00000000-0000-0000-0000-000000000000"),
+    schema: str = DEFAULT_SCHEMA,
+) -> None:
+  delete_vectors_all(entity_id) // your function to delete the associated vectors
+  delete_facet_weights(conn=conn, entity_ids=[entity_id])
+```
+
+
 ## 🔍 Advanced Features
 
 ### 1. Client-Side Validation
