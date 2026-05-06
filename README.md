@@ -197,6 +197,7 @@ async def kitana_ingestion_example():
     engine = get_async_engine()
     async with engine.connect() as conn:
         # Done in one DB call; large batches are recommended for accuracy and performance
+        # Parallel ingestion can cause issues with Postgres and affect accuracy
         weighted_docs = await get_db_weights(
             conn=conn, entity_id=entity_id, documents=docs
         )
