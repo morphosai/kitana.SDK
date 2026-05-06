@@ -48,7 +48,7 @@ pip install kitana-0.1.3-py3-none-any.whl
 ```shell
 uv add kitana-0.1.3-py3-none-any.whl
 ```
-
+<!--
 ### Install the SDK using repo
 
 #### Astral uv using Repo
@@ -110,6 +110,7 @@ uv add kitana-0.1.3-py3-none-any.whl
     ```shell
     pip install kitana==0.1.2
     ```
+-->
 
 ## 🗄️ Database Setup
 
